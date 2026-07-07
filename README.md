@@ -28,16 +28,34 @@ php artisan vendor:publish --tag=image-optimizer       # (optionnel) publie la c
 
 Rien d'autre à faire : la réduction à l'upload s'active toute seule.
 
-## Configuration (`config/image-optimizer.php`)
+## Configuration
 
-- `max_dimension` — plus grand côté autorisé (défaut 2560)
-- `quality` — qualité de ré-encodage (défaut 85)
-- `formats` — formats traités (`jpg, jpeg, png, webp`)
-- `auto_downscale_on_upload` — activer/désactiver l'action à l'upload
-- `excluded_containers` — handles de containers à ne jamais toucher
+`max_dimension` est **à la fois le seuil et la cible** : une image dont un côté dépasse
+cette valeur est réduite jusqu'à cette valeur (jamais agrandie).
 
-Tout est surchargeable par `.env` : `IMAGE_MAX_DIMENSION`, `IMAGE_QUALITY`,
-`IMAGE_AUTO_DOWNSCALE`.
+### Le plus simple — dans le `.env`
+```bash
+IMAGE_MAX_DIMENSION=2000     # réduit tout ce qui dépasse 2000 px (défaut 2560)
+IMAGE_QUALITY=85             # qualité de ré-encodage 0-100 (défaut 85)
+IMAGE_AUTO_DOWNSCALE=true    # false = désactive la réduction à l'upload
+```
+Puis `php artisan config:clear`. Prise en compte **immédiate**, aucun déploiement requis.
+
+### Ou dans le fichier de config
+```bash
+php artisan vendor:publish --tag=image-optimizer   # crée config/image-optimizer.php
+```
+
+| Clé | Défaut | Rôle |
+|---|---|---|
+| `max_dimension` | 2560 | Plus grand côté autorisé (seuil de déclenchement **et** taille cible) |
+| `quality` | 85 | Qualité de ré-encodage (0-100) |
+| `formats` | jpg, jpeg, png, webp | Formats traités (le reste est ignoré) |
+| `auto_downscale_on_upload` | true | Activer / désactiver la réduction à l'upload |
+| `excluded_containers` | (vide) | Handles de containers à ne jamais toucher |
+
+> Après avoir baissé `max_dimension`, tu peux réappliquer la limite aux images déjà
+> présentes avec `php artisan images:downscale` (voir ci-dessous).
 
 ## Images déjà présentes
 
