@@ -1,0 +1,28 @@
+{
+    "name": "foorintodev/statamic-image-optimizer",
+    "description": "Réduit automatiquement les images trop grandes à l'upload dans Statamic (+ commande pour l'existant). Léger, sans dépendance externe (Intervention Image livré avec Statamic).",
+    "type": "statamic-addon",
+    "version": "1.0.0",
+    "license": "MIT",
+    "autoload": {
+        "psr-4": {
+            "Foorintodev\\ImageOptimizer\\": "src"
+        }
+    },
+    "extra": {
+        "statamic": {
+            "name": "Foorintodev Image Optimizer",
+            "description": "Redimensionne les images trop grandes à l'upload. Le plus grand côté est ramené à une limite configurable, sans agrandir, format conservé."
+        },
+        "laravel": {
+            "providers": [
+                "Foorintodev\\ImageOptimizer\\ServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "php": "^8.2",
+        "statamic/cms": "^6.0",
+        "intervention/image": "^3.0"
+    }
+}
