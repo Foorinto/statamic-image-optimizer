@@ -49,7 +49,11 @@ class ImageDownscaler
             ? ImageManager::gd()
             : new ImageManager(new \Intervention\Image\Drivers\Gd\Driver);
 
-        $image = $manager->read($disk->get($path));
+        // Intervention Image v3 : read() ; v4 : decodeBinary().
+        $binary = $disk->get($path);
+        $image = method_exists($manager, 'read')
+            ? $manager->read($binary)
+            : $manager->decodeBinary($binary);
         $image->scaleDown($max, $max);
 
         // Intervention Image v3 : encodeByExtension() ; v4 : encodeUsingFileExtension().
