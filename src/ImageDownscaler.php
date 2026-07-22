@@ -51,7 +51,12 @@ class ImageDownscaler
 
         $image = $manager->read($disk->get($path));
         $image->scaleDown($max, $max);
-        $disk->put($path, (string) $image->encodeByExtension($ext, quality: $quality));
+
+        // Intervention Image v3 : encodeByExtension() ; v4 : encodeUsingFileExtension().
+        $encoded = method_exists($image, 'encodeByExtension')
+            ? $image->encodeByExtension($ext, quality: $quality)
+            : $image->encodeUsingFileExtension($ext, quality: $quality);
+        $disk->put($path, (string) $encoded);
 
         // Rafraîchir les métadonnées en cache (dimensions, poids).
         $asset->writeMeta($asset->generateMeta());

@@ -2,7 +2,7 @@
     "name": "foorintodev/statamic-image-optimizer",
     "description": "Réduit automatiquement les images trop grandes à l'upload dans Statamic (+ commande pour l'existant). Léger, sans dépendance externe (Intervention Image livré avec Statamic).",
     "type": "statamic-addon",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "license": "MIT",
     "autoload": {
         "psr-4": {
@@ -23,6 +23,6 @@
     "require": {
         "php": "^8.2",
         "statamic/cms": "^6.0",
-        "intervention/image": "^3.0"
+        "intervention/image": "^3.9.1 || ^4.0"
     }
 }
