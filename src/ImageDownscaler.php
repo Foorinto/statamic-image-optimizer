@@ -54,6 +54,15 @@ class ImageDownscaler
         $image = method_exists($manager, 'read')
             ? $manager->read($binary)
             : $manager->decodeBinary($binary);
+
+        // Les métadonnées peuvent être périmées (cache laissé par la v1.0.2) : on se fie aux
+        // dimensions réelles du fichier pour ne jamais ré-encoder une image déjà conforme.
+        if ($image->width() <= $max && $image->height() <= $max) {
+            $asset->saveQuietly();
+
+            return false;
+        }
+
         $image->scaleDown($max, $max);
 
         // Intervention Image v3 : encodeByExtension() ; v4 : encodeUsingFileExtension().
@@ -62,8 +71,9 @@ class ImageDownscaler
             : $image->encodeUsingFileExtension($ext, quality: $quality);
         $disk->put($path, (string) $encoded);
 
-        // Rafraîchir les métadonnées en cache (dimensions, poids).
-        $asset->writeMeta($asset->generateMeta());
+        // Régénère les métadonnées (dimensions, poids) ET vide leur cache : writeMeta() seul
+        // laisserait les anciennes valeurs dans le cache et sur l'objet Asset.
+        $asset->saveQuietly();
 
         return true;
     }
