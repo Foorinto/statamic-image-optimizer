@@ -19,9 +19,10 @@ dépendance externe (Intervention Image est déjà livré avec Statamic).
 
 ## Installation
 
+L'addon n'est pas sur Packagist : il s'installe avec Composer depuis son dépôt GitHub (public).
+
 ```bash
 composer config repositories.foorintodev-image-optimizer vcs https://github.com/Foorinto/statamic-image-optimizer.git
-composer config github-oauth.github.com <PAT>          # repo privé
 composer require foorintodev/statamic-image-optimizer:^1.0
 php artisan vendor:publish --tag=image-optimizer       # (optionnel) publie la config
 ```
@@ -61,6 +62,20 @@ php artisan vendor:publish --tag=image-optimizer   # crée config/image-optimize
 
 ```bash
 php artisan images:downscale            # tous les containers
-php artisan images:downscale zeutzius   # un container précis
+php artisan images:downscale assets     # un container précis (son handle)
 ```
-Parcourt les assets et réduit ceux dont un côté dépasse `max_dimension`.
+Parcourt les assets et réduit ceux dont un côté dépasse `max_dimension`. Une image déjà
+conforme n'est jamais ré-encodée : la commande peut être relancée sans perte de qualité.
+
+> Images ajoutées **hors du CP** (FTP, rsync…) : Statamic garde en cache la liste des
+> fichiers d'un container. Lancer `php please stache:clear` avant la commande pour qu'elle
+> les voie.
+
+## Tests
+
+Depuis le dossier de l'addon (installe un Statamic de test dans son propre `vendor/`) :
+
+```bash
+composer install
+composer test
+```

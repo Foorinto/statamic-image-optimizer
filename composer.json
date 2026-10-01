@@ -9,6 +9,11 @@
             "Foorintodev\\ImageOptimizer\\": "src"
         }
     },
+    "autoload-dev": {
+        "psr-4": {
+            "Foorintodev\\ImageOptimizer\\Tests\\": "tests"
+        }
+    },
     "extra": {
         "statamic": {
             "name": "Foorintodev Image Optimizer",
@@ -24,5 +29,16 @@
         "php": "^8.2",
         "statamic/cms": "^6.0",
         "intervention/image": "^3.9.1 || ^4.0"
+    },
+    "require-dev": {
+        "orchestra/testbench": "^10.8 || ^11.0"
+    },
+    "scripts": {
+        "test": "phpunit"
+    },
+    "config": {
+        "allow-plugins": {
+            "pixelfear/composer-dist-plugin": true
+        }
     }
 }
